@@ -5,7 +5,8 @@ import logging
 
 class PVC():
 
-    def __init__(self, name='task-pvc', size_gb=1, namespace='default'):
+    def __init__(self, name='task-pvc', size_gb=1, namespace='default',
+                 storageClassName=None):
         self.name = name
         self.spec = {'apiVersion': 'v1',
                      'kind': 'PersistentVolumeClaim',
@@ -16,6 +17,10 @@ class PVC():
                          # 'storageClassName': 'gold'
                      }
                      }
+        self.volume_mounts = None
+
+        if storageClassName is not None:
+            self.spec['spec']['storageClassName'] = storageClassName
 
         self.subpath_idx = 0
         self.namespace = namespace
@@ -28,12 +33,12 @@ class PVC():
         subpath = 'dir' + str(self.subpath_idx)
         self.subpath_idx += 1
         return subpath
-    
+
     def create(self):
-        
+
         logging.debug('Creating PVC...')
         logging.debug(pprint(self.spec))
-        
+
         return self.cv1.create_namespaced_persistent_volume_claim(self.namespace, self.spec)
 
     def delete(self):

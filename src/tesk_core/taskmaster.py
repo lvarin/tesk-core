@@ -101,7 +101,7 @@ def init_pvc(data, filer):
     task_name = data['executors'][0]['metadata']['labels']['taskmaster-name']
     pvc_name = task_name + '-pvc'
     pvc_size = data['resources']['disk_gb']
-    pvc = PVC(pvc_name, pvc_size, args.namespace)
+    pvc = PVC(pvc_name, pvc_size, args.namespace, args.storageClassName)
 
     mounts = generate_mounts(data, pvc)
     logging.debug(mounts)
@@ -209,6 +209,11 @@ def newParser():
         '--namespace',
         help='Kubernetes namespace to run in',
         default='default')
+    parser.add_argument(
+        '-sc',
+        '--storage-class',
+        help='Storage class to use',
+        default=None)
     parser.add_argument(
         '-s',
         '--state-file',
