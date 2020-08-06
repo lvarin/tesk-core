@@ -101,7 +101,7 @@ def init_pvc(data, filer):
     task_name = data['executors'][0]['metadata']['labels']['taskmaster-name']
     pvc_name = task_name + '-pvc'
     pvc_size = data['resources']['disk_gb']
-    pvc = PVC(pvc_name, pvc_size, args.namespace, args.storageClassName)
+    pvc = PVC(pvc_name, pvc_size, args.namespace, args.storage_class)
 
     mounts = generate_mounts(data, pvc)
     logging.debug(mounts)
