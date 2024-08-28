@@ -30,8 +30,9 @@ def run_executor(executor, namespace, pvc=None):
         spec['restartPolicy'] = spec['restart_policy']
 
     for container in spec['containers']:
-        if container['resources']['limits'] is None and \
-           container['resources']['requests'] is not None:
+        if ('limits' not in container['resources'].keys() or \
+            container['resources']['limits'] is None) and \
+            container['resources']['requests'] is not None:
             container['resources']['limits'] = container['resources']['requests']
 
     if pvc is not None:
